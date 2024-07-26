@@ -100,21 +100,20 @@ def format_axis(ax: plt.Axes, date_range: pd.DatetimeIndex, custom_format) -> pl
     Returns:
         The matplotlib axes
     """
-    # Minor ticks on
-    # ax.minorticks_on()
-
     # Get suitable formatter and locator
     if custom_format:
-        formatter = mdates.DateFormatter(custom_format)
+        x_major_formatter = mdates.DateFormatter(custom_format)
     else:
-        formatter = get_x_formatter(date_range)
-    locator = SmartDateLocator(maxticks=20)
+        x_major_formatter = get_x_formatter(date_range)
+    x_major_locator = SmartDateLocator(maxticks=20, interval_multiples=False)
+    y_major_locator = mticker.MaxNLocator(10)
 
-    ax.xaxis.set_major_locator(locator)
-    ax.xaxis.set_major_formatter(formatter)
+    # X-axis formatting
+    ax.xaxis.set_major_locator(x_major_locator)
+    ax.xaxis.set_major_formatter(x_major_formatter)
 
-    # Set at least 10 y major ticks
-    ax.yaxis.set_major_locator(mticker.MaxNLocator(10))
+    # Y-axis formatting
+    ax.yaxis.set_major_locator(y_major_locator)
 
     # Gridlines
     ax.xaxis.grid(

@@ -7,15 +7,6 @@ import pandas as pd
 
 from plot.xaxis import format_axis
 
-
-def infer_frequency(timestamps):
-    try:
-        datetime_index = pd.DatetimeIndex(timestamps)
-        inferred_frequency = pd.infer_freq(datetime_index)
-        return inferred_frequency
-    except (TypeError, ValueError):
-        return None
-
 fig_style = {
     'figure.figsize': (16, 9),
     'axes.spines.left': True,
@@ -30,6 +21,15 @@ fig_style = {
 }
 
 
+def infer_frequency(timestamps):
+    try:
+        datetime_index = pd.DatetimeIndex(timestamps)
+        inferred_frequency = pd.infer_freq(datetime_index)
+        return inferred_frequency
+    except (TypeError, ValueError):
+        return None
+
+
 @mpl.rc_context(fig_style)
 def plot_ts(x_values=None,
             y_values=None,
@@ -42,7 +42,6 @@ def plot_ts(x_values=None,
     Ref: https://matplotlib.org/stable/users/explain/customizing.html#temporary-rc-settings
     Ref: https://pandas.pydata.org/docs/user_guide/timeseries.html#period-aliases
     """
-    # TODO: minor tick formatting (they're not evenly spaced which is hard to read)
     # TODO: parameter validation
     # TODO: custom cmap
     # TODO: handle multi row/col plots
