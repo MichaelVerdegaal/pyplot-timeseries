@@ -28,19 +28,20 @@ mpl.rcParams.update(fig_style)
 register_cmaps()
 
 
-def plot_ts(x_values: Sequence | None = None,
+def plot_ts(x_values: Sequence | None = None,  # use an alias
             y_values: Sequence | None = None,
             rows: int = 1,
             cols: int = 1,
             frequency: str = None,
             custom_format: str = None,
-            start_time: pd.Timestamp | datetime | str | None = None) -> tuple[plt.Figure, plt.Axes, pd.DatetimeIndex]:
+            start_time: pd.Timestamp | datetime | str | None = None,
+            cmap: str = "pong7",
+            ) -> tuple[plt.Figure, plt.Axes, pd.DatetimeIndex]:
     """
     Ref: https://matplotlib.org/stable/users/explain/customizing.html#temporary-rc-settings
     Ref: https://pandas.pydata.org/docs/user_guide/timeseries.html#period-aliases
     """
     # TODO: parameter validation
-    # TODO: provide your own cmap
     # TODO: pre-commit
     # TODO: cleaning
     # TODO: make it a package / usable by others
@@ -81,7 +82,7 @@ def plot_ts(x_values: Sequence | None = None,
     fig, axs = plt.subplots(rows, cols)
 
     # Set colormap
-    cmap = plt.get_cmap("pong7")
+    cmap = plt.get_cmap(cmap)
     plt.set_cmap(cmap)
 
     # Axis formatting
