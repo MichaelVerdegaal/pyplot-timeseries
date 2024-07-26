@@ -1,11 +1,15 @@
 """
 
 """
+from datetime import datetime
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
+from collections.abc import Sequence
 
-from plot.xaxis import format_axis
+from plot.cmaps import register_cmaps
+from plot.xaxis import format_axis, infer_frequency
 
 fig_style = {
     'figure.figsize': (16, 9),
@@ -19,40 +23,42 @@ fig_style = {
     'xtick.direction': 'out',
     'ytick.direction': 'out'
 }
+mpl.rcParams.update(fig_style)
+register_cmaps()
 
 
-def infer_frequency(timestamps):
-    try:
-        datetime_index = pd.DatetimeIndex(timestamps)
-        inferred_frequency = pd.infer_freq(datetime_index)
-        return inferred_frequency
-    except (TypeError, ValueError):
-        return None
-
-
-@mpl.rc_context(fig_style)
-def plot_ts(x_values=None,
-            y_values=None,
-            rows=1,
-            cols=1,
-            frequency=None,
-            custom_format=None,
-            start_time=None):
+def plot_ts(x_values: Sequence | None = None,
+            y_values: Sequence | None = None,
+            rows: int = 1,
+            cols: int = 1,
+            frequency: str = None,
+            custom_format: str = None,
+            start_time: pd.Timestamp | datetime | str | None = None) -> tuple[plt.Figure, plt.Axes, pd.DatetimeIndex]:
     """
     Ref: https://matplotlib.org/stable/users/explain/customizing.html#temporary-rc-settings
     Ref: https://pandas.pydata.org/docs/user_guide/timeseries.html#period-aliases
     """
     # TODO: parameter validation
     # TODO: custom cmap
-    # TODO: handle multi row/col plots
-    # TOOD: pre-commit
+    # TODO: pre-commit
     # TODO: cleaning
     # TODO: make it a package / usable by others
     # TODO: documentation
     # TODO: tests? ..... ugh
 
+    # Validation
     if x_values is None and y_values is None:
         raise ValueError("Must provide at least 1 of x or y values")
+    if rows < 1:
+        raise ValueError("rows must be at least 1")
+    if cols < 1:
+        raise ValueError("cols must be at least 1")
+
+    # Convert x and y to 1D lists
+    if x_values is not None and not isinstance(x_values, list):
+        x_values = list(x_values)
+    if y_values is not None and not isinstance(y_values, list):
+        y_values = list(y_values)
 
     # Get timesteps
     periods = len(x_values) if x_values is not None else len(y_values)
@@ -74,8 +80,12 @@ def plot_ts(x_values=None,
                                freq=freq,
                                inclusive="left")
 
-    # ...
+    # Create subplots
     fig, axs = plt.subplots(rows, cols)
+
+    # Set colormap
+    cmap = plt.get_cmap("pong7")
+    plt.set_cmap(cmap)
 
     # Axis formatting
     if rows == 1 and cols == 1:

@@ -1,3 +1,5 @@
+from typing import Sequence
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib import dates as mdates, ticker as mticker
@@ -121,3 +123,12 @@ def format_axis(ax: plt.Axes, date_range: pd.DatetimeIndex, custom_format) -> pl
     )
 
     return ax
+
+
+def infer_frequency(timestamps: Sequence) -> str | None:
+    try:
+        datetime_index = pd.DatetimeIndex(timestamps)
+        inferred_frequency = pd.infer_freq(datetime_index)
+        return inferred_frequency
+    except (TypeError, ValueError):
+        return None
