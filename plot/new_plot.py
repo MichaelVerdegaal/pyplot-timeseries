@@ -5,6 +5,7 @@ from datetime import datetime
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from collections.abc import Sequence
 
@@ -39,13 +40,12 @@ def plot_ts(x_values: Sequence | None = None,
     Ref: https://pandas.pydata.org/docs/user_guide/timeseries.html#period-aliases
     """
     # TODO: parameter validation
-    # TODO: custom cmap
+    # TODO: provide your own cmap
     # TODO: pre-commit
     # TODO: cleaning
     # TODO: make it a package / usable by others
     # TODO: documentation
-    # TODO: tests? ..... ugh
-
+    # TODO: tests?
     # Validation
     if x_values is None and y_values is None:
         raise ValueError("Must provide at least 1 of x or y values")
@@ -53,12 +53,6 @@ def plot_ts(x_values: Sequence | None = None,
         raise ValueError("rows must be at least 1")
     if cols < 1:
         raise ValueError("cols must be at least 1")
-
-    # Convert x and y to 1D lists
-    if x_values is not None and not isinstance(x_values, list):
-        x_values = list(x_values)
-    if y_values is not None and not isinstance(y_values, list):
-        y_values = list(y_values)
 
     # Get timesteps
     periods = len(x_values) if x_values is not None else len(y_values)
@@ -69,7 +63,10 @@ def plot_ts(x_values: Sequence | None = None,
     # get start time
     if not start_time:
         if x_values is not None:
-            start_time = x_values[0]
+            if isinstance(x_values, pd.Series):
+                start_time = x_values.iloc[0]
+            else:
+                start_time = x_values[0]
         else:
             # default time
             start_time = pd.Timestamp(f"{pd.Timestamp.now().year}-01-01")
