@@ -1,8 +1,9 @@
 """
 
 """
-from typing import Type
+
 from datetime import datetime
+from typing import TypeAlias
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -13,47 +14,47 @@ from plot.cmaps import register_cmaps
 from plot.xaxis import format_axis, infer_frequency
 
 # Typehint alias
-type ACCEPTED_X = list | pd.Series | np.ndarray | None
-type ACCEPTED_Y = list | pd.Series | np.ndarray | None
+ACCEPTED_X: TypeAlias = list | pd.Series | np.ndarray | None
+ACCEPTED_Y: TypeAlias = list | pd.Series | np.ndarray | None
 
 # Figure settings
 fig_style = {
-    'axes.spines.left': True,
-    'axes.spines.bottom': True,
-    'axes.spines.top': False,
-    'axes.spines.right': False,
-    'axes.xmargin': 0,
-    'axes.ymargin': 0,
-    'axes.zmargin': 0,
-    'xtick.direction': 'out',
-    'ytick.direction': 'out'
+    "axes.spines.left": True,
+    "axes.spines.bottom": True,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "axes.xmargin": 0,
+    "axes.ymargin": 0,
+    "axes.zmargin": 0,
+    "xtick.direction": "out",
+    "ytick.direction": "out",
 }
 mpl.rcParams.update(fig_style)
 register_cmaps()
 
 
-def plot_ts(x_values: ACCEPTED_X = None,
-            y_values: ACCEPTED_Y = None,
-            rows: int = 1,
-            cols: int = 1,
-            frequency: str = None,
-            custom_format: str = None,
-            start_time: pd.Timestamp | datetime | str | None = None,
-            cmap: str = "pong7",
-            ) -> tuple[plt.Figure, plt.Axes, pd.DatetimeIndex]:
+def plot_ts(
+    x_values: ACCEPTED_X = None,
+    y_values: ACCEPTED_Y = None,
+    rows: int = 1,
+    cols: int = 1,
+    frequency: str = None,
+    custom_format: str = None,
+    start_time: pd.Timestamp | datetime | str | None = None,
+    cmap: str = "pong7",
+) -> tuple[plt.Figure, plt.Axes, pd.DatetimeIndex]:
     """
     Ref: https://matplotlib.org/stable/users/explain/customizing.html#temporary-rc-settings
     Ref: https://pandas.pydata.org/docs/user_guide/timeseries.html#period-aliases
     """
-    # TODO: pre-commit
     # TODO: cleaning
     # TODO: make it a package / usable by others
     # TODO: documentation
     # TODO: tests?
     # Validation
-    if not isinstance(x_values, type(ACCEPTED_X)):
+    if not isinstance(x_values, list | pd.Series | np.ndarray | None):
         raise TypeError("x_values must be a list, pd.Series, np.ndarray, or None")
-    if not isinstance(y_values, type(ACCEPTED_Y)):
+    if not isinstance(x_values, list | pd.Series | np.ndarray | None):
         raise TypeError("y_values must be a list, pd.Series, np.ndarray, or None")
     if x_values is None and y_values is None:
         raise ValueError("Must provide at least 1 of x or y values")
@@ -80,10 +81,9 @@ def plot_ts(x_values: ACCEPTED_X = None,
             start_time = pd.Timestamp(f"{pd.Timestamp.now().year}-01-01")
 
     # create new x-axis
-    date_range = pd.date_range(start=start_time,
-                               periods=periods,
-                               freq=freq,
-                               inclusive="left")
+    date_range = pd.date_range(
+        start=start_time, periods=periods, freq=freq, inclusive="left"
+    )
 
     # Create subplots
     plot_height = 6 + (rows * 2)

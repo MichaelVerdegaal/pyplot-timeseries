@@ -2,7 +2,8 @@ from typing import Sequence
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from matplotlib import dates as mdates, ticker as mticker
+from matplotlib import dates as mdates
+from matplotlib import ticker as mticker
 
 
 class SmartDateLocator(mdates.AutoDateLocator):
@@ -13,7 +14,12 @@ class SmartDateLocator(mdates.AutoDateLocator):
     ensures that the number of ticks does not exceed a specified maximum.
     """
 
-    def __init__(self, minticks: int = 5, maxticks: int = 10, interval_multiples: bool = True):
+    def __init__(
+        self,
+        minticks: int = 5,
+        maxticks: int = 10,
+        interval_multiples: bool = True,
+    ):
         """
         Initialize the SmartDateLocator.
 
@@ -22,10 +28,16 @@ class SmartDateLocator(mdates.AutoDateLocator):
             maxticks: The maximum number of ticks to display.
             interval_multiples: If True, ticks will be chosen to be multiples of intervals.
         """
-        super().__init__(minticks=minticks, maxticks=maxticks, interval_multiples=interval_multiples)
+        super().__init__(
+            minticks=minticks,
+            maxticks=maxticks,
+            interval_multiples=interval_multiples,
+        )
         self._max_ticks = maxticks
 
-    def get_locator(self, dmin: float, dmax: float) -> mdates.DateLocator | mticker.MaxNLocator:
+    def get_locator(
+        self, dmin: float, dmax: float
+    ) -> mdates.DateLocator | mticker.MaxNLocator:
         """
         Get the appropriate locator based on the date range.
 
@@ -50,7 +62,7 @@ class SmartDateLocator(mdates.AutoDateLocator):
 
 def get_x_formatter(date_range: pd.DatetimeIndex) -> mticker.Formatter:
     """Get info about the date range to determine string format
-    
+
     Args:
         date_range: A pandas DatetimeIndex representing the date range.
 
@@ -61,28 +73,28 @@ def get_x_formatter(date_range: pd.DatetimeIndex) -> mticker.Formatter:
     time_span = date_range.max() - date_range.min()
 
     # 1 second to 1 minute
-    if pd.Timedelta('1 second') <= time_span < pd.Timedelta('1 minute'):
+    if pd.Timedelta("1 second") <= time_span < pd.Timedelta("1 minute"):
         str_format = "%H:%M:%S"
     # 1 minute to 1 hour
-    elif pd.Timedelta('1 minute') <= time_span < pd.Timedelta('1 hour'):
+    elif pd.Timedelta("1 minute") <= time_span < pd.Timedelta("1 hour"):
         str_format = "%d %H:%M"
     # 1 hour to 1 day
-    elif pd.Timedelta('1 hour') <= time_span < pd.Timedelta('1 day'):
+    elif pd.Timedelta("1 hour") <= time_span < pd.Timedelta("1 day"):
         str_format = "%m-%d %H:%M"
     # 1 day to 7 days
-    elif pd.Timedelta('1 day') <= time_span < pd.Timedelta('7 days'):
+    elif pd.Timedelta("1 day") <= time_span < pd.Timedelta("7 days"):
         str_format = "%Y-%m-%d"
     # 7 days to 1 month
-    elif pd.Timedelta('7 days') <= time_span < pd.Timedelta('30 days'):
+    elif pd.Timedelta("7 days") <= time_span < pd.Timedelta("30 days"):
         str_format = "%Y-%m-%d"
     # 1 month to 3 months
-    elif pd.Timedelta('30 days') <= time_span < pd.Timedelta('90 days'):
+    elif pd.Timedelta("30 days") <= time_span < pd.Timedelta("90 days"):
         str_format = "%Y-%m-%d"
     # 3 months to 1 year
-    elif pd.Timedelta('90 days') <= time_span < pd.Timedelta('365 days'):
+    elif pd.Timedelta("90 days") <= time_span < pd.Timedelta("365 days"):
         str_format = "%Y-%m-%d"
     # 1 year to 3 years
-    elif pd.Timedelta('365 days') <= time_span < pd.Timedelta('1095 days'):
+    elif pd.Timedelta("365 days") <= time_span < pd.Timedelta("1095 days"):
         str_format = "%Y-%m-%d"
     else:
         str_format = "%Y-%m-%d"
@@ -118,9 +130,7 @@ def format_axis(ax: plt.Axes, date_range: pd.DatetimeIndex, custom_format) -> pl
     ax.yaxis.set_major_locator(y_major_locator)
 
     # Gridlines
-    ax.xaxis.grid(
-        which="both", color="#b2b2b2", linestyle="--", linewidth=0.5
-    )
+    ax.xaxis.grid(which="both", color="#b2b2b2", linestyle="--", linewidth=0.5)
 
     return ax
 

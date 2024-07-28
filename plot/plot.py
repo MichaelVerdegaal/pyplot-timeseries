@@ -1,6 +1,7 @@
 """
 This file contains functions and filed related to creating plots (pyplot)
 """
+
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -9,13 +10,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from cycler import cycler
-from .constants import (
-    ONE_DAY_TIMESTEPS,
-    ONE_TIMESTEP,
-    ONE_WEEK_TIMESTEPS,
-)
-from .cmaps import register_cmaps
 from matplotlib import ticker
+
+from .cmaps import register_cmaps
+from .constants import ONE_DAY_TIMESTEPS, ONE_TIMESTEP, ONE_WEEK_TIMESTEPS
 
 register_cmaps()
 
@@ -115,9 +113,7 @@ def timeseries_plot(
         axis.minorticks_on()
         # Format x-axis
         start_base = (
-            start_time
-            if start_time
-            else datetime(2021, 1, 1, timezone_offset, 0, 0)
+            start_time if start_time else datetime(2021, 1, 1, timezone_offset, 0, 0)
         )
         times, str_format, locator = xaxis_helper(
             start_base, signal_length, minute_increment
@@ -129,9 +125,7 @@ def timeseries_plot(
         axis.yaxis.set_major_locator(ticker.MaxNLocator(10))
 
         ## Gridlines
-        axis.xaxis.grid(
-            which="both", color="#b2b2b2", linestyle="--", linewidth=0.5
-        )
+        axis.xaxis.grid(which="both", color="#b2b2b2", linestyle="--", linewidth=0.5)
 
         ## Color cycle
         axis.set_prop_cycle(cycler(color=color_map.colors))
@@ -171,5 +165,3 @@ def timeseries_plot(
         plt.tight_layout(pad=2)
 
         return fig, axs, times
-
-

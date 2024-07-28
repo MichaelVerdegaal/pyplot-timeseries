@@ -1,6 +1,7 @@
 """
 This file contains custom matplotlib colormaps.
 """
+
 import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib.colors import ListedColormap
