@@ -1,19 +1,23 @@
 """
 
 """
+from typing import Type
 from datetime import datetime
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from collections.abc import Sequence
 
 from plot.cmaps import register_cmaps
 from plot.xaxis import format_axis, infer_frequency
 
+# Typehint alias
+type ACCEPTED_X = list | pd.Series | np.ndarray | None
+type ACCEPTED_Y = list | pd.Series | np.ndarray | None
+
+# Figure settings
 fig_style = {
-    'figure.figsize': (16, 9),
     'axes.spines.left': True,
     'axes.spines.bottom': True,
     'axes.spines.top': False,
@@ -28,8 +32,8 @@ mpl.rcParams.update(fig_style)
 register_cmaps()
 
 
-def plot_ts(x_values: Sequence | None = None,  # use an alias
-            y_values: Sequence | None = None,
+def plot_ts(x_values: ACCEPTED_X = None,
+            y_values: ACCEPTED_Y = None,
             rows: int = 1,
             cols: int = 1,
             frequency: str = None,
@@ -79,7 +83,9 @@ def plot_ts(x_values: Sequence | None = None,  # use an alias
                                inclusive="left")
 
     # Create subplots
-    fig, axs = plt.subplots(rows, cols)
+    plot_height = 6 + (rows * 2)
+    plot_width = 14 + (cols * 2)
+    fig, axs = plt.subplots(rows, cols, figsize=(plot_width, plot_height))
 
     # Set colormap
     cmap = plt.get_cmap(cmap)
