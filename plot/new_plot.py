@@ -45,13 +45,16 @@ def plot_ts(x_values: ACCEPTED_X = None,
     Ref: https://matplotlib.org/stable/users/explain/customizing.html#temporary-rc-settings
     Ref: https://pandas.pydata.org/docs/user_guide/timeseries.html#period-aliases
     """
-    # TODO: parameter validation
     # TODO: pre-commit
     # TODO: cleaning
     # TODO: make it a package / usable by others
     # TODO: documentation
     # TODO: tests?
     # Validation
+    if not isinstance(x_values, type(ACCEPTED_X)):
+        raise TypeError("x_values must be a list, pd.Series, np.ndarray, or None")
+    if not isinstance(y_values, type(ACCEPTED_Y)):
+        raise TypeError("y_values must be a list, pd.Series, np.ndarray, or None")
     if x_values is None and y_values is None:
         raise ValueError("Must provide at least 1 of x or y values")
     if rows < 1:
