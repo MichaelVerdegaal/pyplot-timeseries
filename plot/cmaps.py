@@ -23,11 +23,17 @@ colors_pong7 = [
     "#563d61",  # Plum purple
 ]
 pong_7 = ListedColormap(colors_pong7, name="pong7", N=len(colors_pong7))
+MAPS_TO_REGISTER = [pong_7]
 
 
 def register_cmaps() -> None:
-    """Register the custom colormaps"""
-    for cmap in [pong_7]:
+    """Register the custom colormaps to matplotlib"""
+    for cmap in MAPS_TO_REGISTER:
         # check if cmap is already registered
         if cmap.name not in plt.colormaps():
             matplotlib.colormaps.register(cmap)
+
+
+def return_custom_cmaps() -> list:
+    """Return the custom colormaps of this file"""
+    return [cmap.name for cmap in MAPS_TO_REGISTER]
