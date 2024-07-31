@@ -1,3 +1,6 @@
+"""
+This file contains functions related to formatting pyplot axes objects.
+"""
 from typing import Sequence
 
 import matplotlib.pyplot as plt
@@ -7,8 +10,7 @@ from matplotlib import ticker as mticker
 
 
 class SmartDateLocator(mdates.AutoDateLocator):
-    """
-    A smart date locator that extends AutoDateLocator with additional functionality.
+    """A smart date locator that extends AutoDateLocator with additional functionality.
 
     This locator attempts to choose the best locator based on the date range and
     ensures that the number of ticks does not exceed a specified maximum.
@@ -36,17 +38,22 @@ class SmartDateLocator(mdates.AutoDateLocator):
         self._max_ticks = maxticks
 
     def get_locator(
-        self, dmin: float, dmax: float
+            self, dmin: float, dmax: float
     ) -> mdates.DateLocator | mticker.MaxNLocator:
         """
         Get the appropriate locator based on the date range.
+
+        This method first attempts to use the superclass's locator. If the resulting
+        number of ticks exceeds the maximum or if an exception occurs, it falls back
+        to using MaxNLocator.
 
         Args:
             dmin: The minimum date value.
             dmax: The maximum date value.
 
         Returns:
-            A date locator or MaxNLocator if the number of ticks exceeds the maximum.
+            A DateLocator from the superclass if suitable, otherwise a MaxNLocator
+            with the specified maximum number of ticks.
         """
         locator = super().get_locator(dmin, dmax)
         try:
@@ -112,7 +119,7 @@ def format_axis(ax: plt.Axes, date_range: pd.DatetimeIndex, custom_format) -> pl
         custom_format: A string representing the custom format of the x-axis.
 
     Returns:
-        The matplotlib axes
+        Pyplot axes
     """
     # Get suitable formatter and locator
     if custom_format:
@@ -136,6 +143,14 @@ def format_axis(ax: plt.Axes, date_range: pd.DatetimeIndex, custom_format) -> pl
 
 
 def infer_frequency(timestamps: Sequence) -> str | None:
+    """Tries to infer the time-series frequency based on provided x-axis
+
+    Args:
+        timestamps: A sequence of timestamps
+
+    Returns:
+        Pandas infered frequency string
+    """
     try:
         datetime_index = pd.DatetimeIndex(timestamps)
         inferred_frequency = pd.infer_freq(datetime_index)
