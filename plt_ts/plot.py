@@ -50,6 +50,8 @@ def plot_ts(
     - Automatic axis formatting and tick selection
     - Custom colormap
 
+    Note that inequally spaced samples are not supported yet.
+
     Ref: https://matplotlib.org/stable/api/ticker_api.html#tick-locating-and-formatting
     Ref: https://matplotlib.org/stable/users/explain/colors/colormap-manipulation.html
     Ref: https://matplotlib.org/stable/users/explain/customizing.html#temporary-rc-settings
@@ -103,7 +105,7 @@ def plot_ts(
             start_time = pd.Timestamp(f"{pd.Timestamp.now().year}-01-01")
 
     # create new x-axis values
-    date_range = pd.date_range(
+    new_x_values = pd.date_range(
         start=start_time, periods=periods, freq=freq, inclusive="left"
     )
 
@@ -119,11 +121,11 @@ def plot_ts(
     # Axis formatting
     # TODO: Check if all formatting happens in-place
     if rows == 1 and cols == 1:
-        axs = format_axis(axs, date_range, custom_format)
+        axs = format_axis(axs, new_x_values, custom_format)
     else:
         axs_flat = axs.flatten()  # Flatten 2D list
         for ax in axs_flat:
-            ax = format_axis(ax, date_range, custom_format)
+            ax = format_axis(ax, new_x_values, custom_format)
 
     # This rotates and aligns the x-tick labels, to avoid overlap
     fig.autofmt_xdate()
@@ -131,4 +133,4 @@ def plot_ts(
     # This adjusts the padding around subplots to make more room
     plt.tight_layout(pad=2)
 
-    return fig, axs, date_range
+    return fig, axs, new_x_values
