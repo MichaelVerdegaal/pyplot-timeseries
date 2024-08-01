@@ -4,6 +4,9 @@ version = "1.0.0"
 description = ""
 authors = ["Michael Verdegaal <michaelverdegaal@hotmail.nl>"]
 readme = "README.md"
+packages = [
+    { include = "plt_ts" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
