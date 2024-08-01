@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from plt_ts.cmaps import register_cmaps
-from plt_ts.xaxis import format_axis, infer_frequency
+from plt_ts.axis import format_axis, infer_frequency
 
 # Typehint alias
 ACCEPTED_X: TypeAlias = list | pd.Series | np.ndarray | None
