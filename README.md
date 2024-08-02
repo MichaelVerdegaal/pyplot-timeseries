@@ -22,7 +22,6 @@ This is the main function of the package. It requires mainly a sample of your cu
 It returns a pyplot Figure and Axis/Axes object, which you can modify as usual. Secondarily it returns a newly generated range of x-values, which is used so you don't have to modify your existing x-values to fit to the figure.
 
 ```python
-```python
 from plt_ts import plot_ts 
 import matplotlib.pyplot as plt
 import pandas as pd
